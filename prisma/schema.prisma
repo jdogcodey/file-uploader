@@ -16,6 +16,36 @@ datasource db {
 model Session {
   id        String   @id
   sid       String   @unique
-  data      String   @db.MediumText
+  data      String
   expiresAt DateTime
+}
+
+model Users {
+  id         Int        @id @default(autoincrement())
+  first_name String
+  last_name  String
+  username   String
+  email      String     @unique
+  password   String
+  documents  Document[]
+  Folder     Folder[]
+}
+
+model Document {
+  id       Int    @id @default(autoincrement())
+  name     String @db.VarChar(255)
+  url      String
+  folderId Int
+  folder   Folder @relation(fields: [folderId], references: [id])
+  userId   Int
+  user     Users  @relation(fields: [userId], references: [id])
+}
+
+model Folder {
+  id        Int        @id @default(autoincrement())
+  name      String     @db.VarChar(255)
+  userId    Int
+  user      Users      @relation(fields: [usersId], references: [id])
+  documents Document[]
+  usersId   Int
 }

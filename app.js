@@ -5,7 +5,7 @@ const { PrismaSessionStore } = require("@quixo3/prisma-session-store");
 const { PrismaClient } = require("@prisma/client");
 const passport = require("passport");
 require("dotenv").config();
-const routes = require("./routes");
+const routes = require("./routes/indexRouter");
 const PORT = process.env.PORT;
 
 const app = express();

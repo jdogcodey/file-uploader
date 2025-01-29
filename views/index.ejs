@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>File Uploader</title>
+    
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
@@ -31,18 +33,41 @@
     </header>
     <main>
         <%if (!user) {%>
-            <h2>Please log in</h2>
-            <form action="/log-in" method="POST">
-                <label for="username">Username</label>
-                <input id="username" name="username" placeholder="e.g. JohnSmith12" type="text" />
-                <label for="password">Password</label>
-                <input id="password" name="password" type="password" />
-                <input type="submit" value="Log In">
-            </form>
+            <div class="log-in">
+                <h2>Please log in</h2>
+                <form action="/log-in" method="POST">
+                    <label for="username">Username</label>
+                    <input id="username" name="username" placeholder="e.g. JohnSmith12" type="text" />
+                    <label for="password">Password</label>
+                    <input id="password" name="password" type="password" />
+                    <input type="submit" value="Log In">
+                </form>
+                <button onClick="toggleVisibility()">Not Signed Up? - Click Here</button>
+            </div>
+            <div class="sign-up hidden">
+                <h2>Please sign up</h2>
+                <form action="/sign-up" method="POST">
+                    <label for="first_name">First Name:</label>
+                    <input id="first_name" name="first_name" placeholder="John" type="text" />
+                    <label for="last_name">Last Name:</label>
+                    <input id="last_name" name="last_name" placeholder="Smith" type="text" />
+                    <label for="username">Username:</label>
+                    <input id="username" name="username" placeholder="JohnSmith" type="text" />
+                    <label for="email">Email:</label>
+                    <input id="email" name="email" placeholder="johnsmith@email.com" type="email" />
+                    <label for="password">Password:</label>
+                    <input id="password" name="password" type="password" />
+                    <label for="confirm-password">Confirm Password:</label>
+                    <input id="confirm-password" name="confirm-password" type="password" />
+                    <input type="submit" value="Sign Up">
+                </form>
+                <button onClick="toggleVisibility()">Already a user? Click Here to Log In</button>
+            </div>
         <%}%>
     </main>
     <footer>
         <p>Made by <a href="https://github.com/jdogcodey">jdogcodey</a> following <a href='https://www.theodinproject.com/'>The Odin Project</a> - <a href='https://www.theodinproject.com/lessons/nodejs-file-uploader'>File Uploader</a></p>
     </footer>
+    <script src="additionaljs.js"></script>
 </body>
 </html>
