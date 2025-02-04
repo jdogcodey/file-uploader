@@ -7,6 +7,7 @@ const passport = require("passport");
 require("dotenv").config();
 const routes = require("./routes/indexRouter");
 const PORT = process.env.PORT;
+require("./config/passport");
 
 const app = express();
 

@@ -1,12 +1,7 @@
 const router = require("express").Router();
-const passport = require("passport");
-const bcrypt = require("bcryptjs");
-const { body, validationResult } = require("express-validator");
 require("dotenv").config();
-const { PrismaClient } = require("@prisma/client");
 const controller = require("../controllers/indexController");
-
-const prisma = new PrismaClient();
+const passport = require("passport");
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
@@ -20,5 +15,9 @@ router.get("/", (req, res, next) => {
 });
 
 router.post("/sign-up", controller.signUpValidation(), controller.signUp);
+
+router.post("/log-in", controller.logIn);
+
+router.get("/log-out", controller.logOut);
 
 module.exports = router;

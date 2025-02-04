@@ -2,9 +2,7 @@ const passport = require("passport");
 const bcrypt = require("bcryptjs");
 const { body, validationResult } = require("express-validator");
 require("dotenv").config();
-const { PrismaClient } = require("@prisma/client");
-
-const prisma = new PrismaClient();
+const prisma = require("../config/prismaClient");
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
@@ -99,6 +97,19 @@ const controller = {
     } catch (err) {
       next(err);
     }
+  },
+  logIn: passport.authenticate("local", {
+    successRedirect: "/",
+    failureRedirect: "/",
+    failureMessage: true,
+  }),
+  logOut: (req, res, next) => {
+    req.logout((err) => {
+      if (err) {
+        return next(err);
+      }
+      res.redirect("/");
+    });
   },
 };
 
