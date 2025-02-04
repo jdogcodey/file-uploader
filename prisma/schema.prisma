@@ -20,7 +20,7 @@ model Session {
   expiresAt DateTime
 }
 
-model Users {
+model User {
   id         Int        @id @default(autoincrement())
   first_name String
   last_name  String
@@ -38,14 +38,14 @@ model Document {
   folderId Int
   folder   Folder @relation(fields: [folderId], references: [id])
   userId   Int
-  user     Users  @relation(fields: [userId], references: [id])
+  user     User   @relation(fields: [userId], references: [id])
 }
 
 model Folder {
   id        Int        @id @default(autoincrement())
   name      String     @db.VarChar(255)
   userId    Int
-  user      Users      @relation(fields: [usersId], references: [id])
+  user      User       @relation(fields: [usersId], references: [id])
   documents Document[]
   usersId   Int
 }
