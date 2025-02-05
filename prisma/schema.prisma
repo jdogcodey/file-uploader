@@ -28,24 +28,24 @@ model User {
   email      String     @unique
   password   String
   documents  Document[]
-  Folder     Folder[]
+  Folders    Folder[]
 }
 
 model Document {
-  id       Int    @id @default(autoincrement())
-  name     String @db.VarChar(255)
-  url      String
-  folderId Int
-  folder   Folder @relation(fields: [folderId], references: [id])
-  userId   Int
-  user     User   @relation(fields: [userId], references: [id])
+  id           Int    @id @default(autoincrement())
+  originalName String @db.VarChar(255)
+  savedName    String @db.VarChar(255)
+  url          String
+  folderId     Int
+  folder       Folder @relation(fields: [folderId], references: [id])
+  userId       Int
+  user         User   @relation(fields: [userId], references: [id])
 }
 
 model Folder {
   id        Int        @id @default(autoincrement())
   name      String     @db.VarChar(255)
   userId    Int
-  user      User       @relation(fields: [usersId], references: [id])
+  user      User       @relation(fields: [userId], references: [id])
   documents Document[]
-  usersId   Int
 }

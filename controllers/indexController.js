@@ -3,15 +3,25 @@ const bcrypt = require("bcryptjs");
 const { body, validationResult } = require("express-validator");
 require("dotenv").config();
 const prisma = require("../config/prismaClient");
+const multer = require("multer");
+const path = require("path");
 
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect("/");
-}
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + "_" + Math.round(Math.random() * 1e9);
+    const fileExtension = path.extname(file.originalname);
+    cb(null, uniqueSuffix + fileExtension);
+  },
+});
+const upload = multer({ storage: storage });
 
 const controller = {
+  homepage: (req, res, next) => {
+    res.render("index", { user: req.user });
+  },
   signUpValidation: () => [
     body("first_name")
       .trim()
@@ -111,6 +121,53 @@ const controller = {
       res.redirect("/");
     });
   },
+  ensureAuthenticated: (req, res, next) => {
+    if (req.isAuthenticated()) {
+      return next();
+    }
+    res.redirect("/");
+  },
+  uploadPage: (req, res, next) => {
+    res.render("upload");
+  },
+  uploadFile: [
+    upload.single("upload-file"),
+    async (req, res) => {
+      try {
+        const folderName = req.body.folder || "New";
+
+        let folder = await prisma.folder.findFirst({
+          where: {
+            name: folderName,
+            userId: req.user.id,
+          },
+        });
+
+        if (!folder) {
+          folder = await prisma.folder.create({
+            data: {
+              name: folderName,
+              user: { connect: { id: req.user.id } },
+            },
+          });
+        }
+
+        const newDocument = await prisma.document.create({
+          data: {
+            originalName: req.file.originalname,
+            savedName: req.file.filename,
+            url: req.file.path,
+            userId: req.user.id,
+            folderId: folder.id,
+          },
+        });
+
+        res.redirect("/files");
+      } catch (error) {
+        res.status(500).json({ error: "Error uploading file" });
+      }
+    },
+  ],
 };
 
 module.exports = controller;
