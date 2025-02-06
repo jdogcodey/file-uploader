@@ -168,6 +168,12 @@ const controller = {
       }
     },
   ],
+  renderFiles: async (req, res, next) => {
+    const files = await prisma.document.findMany({
+      where: { userId: req.user.id },
+    });
+    console.log(files);
+  },
 };
 
 module.exports = controller;
