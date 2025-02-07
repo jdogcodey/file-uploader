@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/jdogcodey/file-uploader#readme",
   "dependencies": {
+    "@prisma/client": "^6.3.1",
     "@quixo3/prisma-session-store": "^3.1.13",
     "bcryptjs": "^2.4.3",
     "connect-pg-simple": "^10.0.0",
@@ -28,7 +29,9 @@
     "multer": "^1.4.5-lts.1",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
-    "pg": "^8.13.1",
-    "prisma": "^6.2.1"
+    "pg": "^8.13.1"
+  },
+  "devDependencies": {
+    "prisma": "^6.3.1"
   }
 }

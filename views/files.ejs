@@ -23,11 +23,49 @@
         </nav>
     </header>
     <main>
-        <%if (!files) {%>
+        <section>
+            <%if (!folders) {%>
+                <h2>No Folders</h2>
+                <a href="/add-folder">Create Folder</a>
+            <%} else {%>
+                <h2>Folders:</h2>
+                <table>
+                    <thead>
+                        <th>Name:</th>
+                        <th>Number of Files:</th>
+                    </thead>
+                    <tbody>
+                        <%folders.forEach((folder) => {%>
+                            <tr>
+                                <td><%=folder.name%></td>
+                                <td><%=folder.documents.length%></td>
+                            </tr>
+                        <%})%>
+                    </tbody>
+                </table>
+                <a href="/add-folder">Add Folder</a>
+            <%}%>
+        </section>
+        <%if (!documents) {%>
             <h2>You don't have any files!</h2>
         <%} else {%>
             <h2>Files</h2>
-            
+            <table>
+                <thead>
+                    <tr>
+                        <th>File:</th>
+                        <th>Size:</th>
+                        <th>Download:</th>
+                    </tr>
+                </thead>
+                <%documents.forEach((document) => { %>
+                    <tr>
+                        <td><%=document.originalName%></td>
+                        <td><%=formatBytes(document.sizeBytes)%></td>
+                        <td><a href='/download/:<%=document.savedName%>'>X</a></td>
+                    </tr>
+                <%})%>
+            </table>
         <%}%>
     </main>
     <footer>

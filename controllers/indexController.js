@@ -1,6 +1,6 @@
 const passport = require("passport");
 const bcrypt = require("bcryptjs");
-const { body, validationResult } = require("express-validator");
+const { body, validationResult, check } = require("express-validator");
 require("dotenv").config();
 const prisma = require("../config/prismaClient");
 const multer = require("multer");
@@ -17,6 +17,28 @@ const storage = multer.diskStorage({
   },
 });
 const upload = multer({ storage: storage });
+
+function formatBytes(bytes, decimals = 2) {
+  if (!+bytes) return "0 Bytes";
+
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = [
+    "Bytes",
+    "KiB",
+    "MiB",
+    "GiB",
+    "TiB",
+    "PiB",
+    "EiB",
+    "ZiB",
+    "YiB",
+  ];
+
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+}
 
 const controller = {
   homepage: (req, res, next) => {
@@ -159,6 +181,7 @@ const controller = {
             url: req.file.path,
             userId: req.user.id,
             folderId: folder.id,
+            sizeBytes: req.file.size,
           },
         });
 
@@ -169,10 +192,55 @@ const controller = {
     },
   ],
   renderFiles: async (req, res, next) => {
-    const files = await prisma.document.findMany({
+    const folders = await prisma.folder.findMany({
       where: { userId: req.user.id },
+      include: {
+        documents: true,
+      },
     });
-    console.log(files);
+    const documents = await prisma.document.findMany({
+      where: { userId: req.user.id },
+      include: {
+        folder: true,
+      },
+    });
+    res.render("files", {
+      folders: folders,
+      documents: documents,
+      formatBytes,
+    });
+  },
+  renderAdd: (req, res, next) => {
+    res.render("add-folder");
+  },
+  addFolder: async (req, res, next) => {
+    try {
+      const checkForDuplicate = await prisma.folder.findFirst({
+        where: {
+          userId: req.user.id,
+          name: req.body.name,
+        },
+      });
+      if (checkForDuplicate) {
+        return res.status(400).json({
+          errors: [
+            {
+              msg: `${req.body.name} is already in use`,
+              param: req.body.name,
+            },
+          ],
+        });
+      }
+      await prisma.folder.create({
+        data: {
+          name: req.body.name,
+          userId: req.user.id,
+        },
+      });
+      res.redirect("/files");
+    } catch (err) {
+      next(err);
+    }
   },
 };
 

@@ -17,4 +17,12 @@ router.post("/upload", controller.ensureAuthenticated, controller.uploadFile);
 
 router.get("/files", controller.ensureAuthenticated, controller.renderFiles);
 
+router.get("/add-folder", controller.ensureAuthenticated, controller.renderAdd);
+
+router.post(
+  "/add-folder",
+  controller.ensureAuthenticated,
+  controller.addFolder
+);
+
 module.exports = router;
