@@ -7,18 +7,26 @@ function toggleVisibility() {
 }
 
 function deleteFolder(folderId) {
-  console.log(folderId);
-  fetch(`/folder/${folderId}`, {
-    method: "DELETE",
-    headers: { "Content-Type": "application/json" },
-  })
-    .then((response) => {
-      console.log("response received");
-      if (response.ok) {
-        document.getElementById(`folder-${folderId}`).remove();
-      } else {
-        alert("Error deleting folder");
-      }
+  if (
+    window.confirm(
+      "This action will delete all associated documents. Are you sure you want to proceed?"
+    )
+  ) {
+    console.log(folderId);
+    fetch(`/folder/${folderId}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
     })
-    .catch((err) => console.error(err));
+      .then((response) => {
+        console.log("response received");
+        if (response.ok) {
+          document.getElementById(`folder-${folderId}`).remove();
+        } else {
+          alert("Error deleting folder");
+        }
+      })
+      .catch((err) => console.error(err));
+  } else {
+    alert("Folder deletion cancelled.");
+  }
 }
