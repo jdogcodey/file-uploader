@@ -5,6 +5,7 @@ require("dotenv").config();
 const prisma = require("../config/prismaClient");
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -149,8 +150,11 @@ const controller = {
     }
     res.redirect("/");
   },
-  uploadPage: (req, res, next) => {
-    res.render("upload");
+  uploadPage: async (req, res, next) => {
+    const folders = await prisma.folder.findMany({
+      where: { userId: req.user.id },
+    });
+    res.render("upload", { folders: folders });
   },
   uploadFile: [
     upload.single("upload-file"),
@@ -210,7 +214,7 @@ const controller = {
       formatBytes,
     });
   },
-  renderAdd: (req, res, next) => {
+  renderAdd: async (req, res, next) => {
     res.render("add-folder");
   },
   addFolder: async (req, res, next) => {
@@ -240,6 +244,75 @@ const controller = {
       res.redirect("/files");
     } catch (err) {
       next(err);
+    }
+  },
+  download: async (req, res, next) => {
+    const document = await prisma.document.findFirst({
+      where: { savedName: req.params.filename },
+    });
+    if (!document) {
+      return res.status(404);
+    } else if (document.userId !== req.user.id) {
+      return res.status(401).json({
+        errors: [
+          {
+            msg: "You cannot access documents you did not upload",
+          },
+        ],
+      });
+    } else {
+      res.download(document.url, (err) => {
+        if (err) {
+          console.error(err);
+          res.status(500).send("Error downloading file");
+        }
+      });
+    }
+  },
+  deleteFolder: async (req, res, next) => {
+    const folderId = parseInt(req.params.folderId);
+    const folder = await prisma.folder.findFirst({
+      where: { id: folderId },
+    });
+    if (!folder) {
+      return res.status(404);
+    } else if (folder.userId !== req.user.id) {
+      return res.status(401).json({
+        errors: [
+          {
+            msg: "You do not have the permissions for this action",
+          },
+        ],
+      });
+    } else {
+      console.log(req.user.id);
+      const docsToDelete = await prisma.document.findMany({
+        where: {
+          userId: req.user.id,
+          folderId: folderId,
+        },
+      });
+      console.log(docsToDelete);
+      docsToDelete.forEach((document) => {
+        const pathToFile = path.join(__dirname, "..", document.url);
+        fs.unlink(pathToFile, (err) => {
+          if (err) {
+            console.error("Error deleting the file:", err);
+            return res.status(500).json({ error: "Failed to delete file" });
+          }
+        });
+      });
+      const deleteDocs = prisma.document.deleteMany({
+        where: {
+          userId: req.user.id,
+          folderId: folderId,
+        },
+      });
+      const deleteFolder = prisma.folder.delete({
+        where: { userId: req.user.id, id: folderId },
+      });
+      await prisma.$transaction([deleteDocs, deleteFolder]);
+      res.status(204).end();
     }
   },
 };

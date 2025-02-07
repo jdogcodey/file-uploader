@@ -26,6 +26,16 @@
        <h2>Upload a new file:</h2>
        <form action="/upload" method="POST" enctype="multipart/form-data">
         <input type="file" name="upload-file" />
+        <%if (folders) {%>
+            <label for="folder">Folder:</label>
+            <select name="folder">
+                <%folders.forEach((folder)=> {%>
+                    <option value="<%=folder.name%>">
+                        <%=folder.name%>
+                    </option>
+                    <%})%>
+            </select>
+            <%}%>
         <input type="submit" value="Upload" />
        </form>
     </main>

@@ -33,12 +33,16 @@
                     <thead>
                         <th>Name:</th>
                         <th>Number of Files:</th>
+                        <th>Edit:</th>
+                        <th>Delete:</th>
                     </thead>
                     <tbody>
                         <%folders.forEach((folder) => {%>
-                            <tr>
+                            <tr id="folder-<%=folder.id%>">
                                 <td><%=folder.name%></td>
                                 <td><%=folder.documents.length%></td>
+                                <td><a href='/edit/<%=folder.id%>'>Edit</a></td>
+                                <td><button onclick="deleteFolder(`<%=folder.id%>`)">Delete</button></td>
                             </tr>
                         <%})%>
                     </tbody>

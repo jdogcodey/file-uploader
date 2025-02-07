@@ -25,4 +25,16 @@ router.post(
   controller.addFolder
 );
 
+router.get(
+  "/download/:filename",
+  controller.ensureAuthenticated,
+  controller.download
+);
+
+router.delete(
+  "/folder/:folderId",
+  controller.ensureAuthenticated,
+  controller.deleteFolder
+);
+
 module.exports = router;
