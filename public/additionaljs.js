@@ -18,7 +18,6 @@ function deleteFolder(folderId) {
       headers: { "Content-Type": "application/json" },
     })
       .then((response) => {
-        console.log("response received");
         if (response.ok) {
           document.getElementById(`folder-${folderId}`).remove();
         } else {
@@ -29,4 +28,19 @@ function deleteFolder(folderId) {
   } else {
     alert("Folder deletion cancelled.");
   }
+}
+
+function deleteDocument(documentId) {
+  fetch(`/document/${documentId}`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+  })
+    .then((response) => {
+      if (response.ok) {
+        document.getElementById(`document-${documentId}`).remove();
+      } else {
+        alert("Error deleting document");
+      }
+    })
+    .catch((err) => console.error(err));
 }

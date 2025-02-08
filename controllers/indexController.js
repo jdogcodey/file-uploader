@@ -285,14 +285,12 @@ const controller = {
         ],
       });
     } else {
-      console.log(req.user.id);
       const docsToDelete = await prisma.document.findMany({
         where: {
           userId: req.user.id,
           folderId: folderId,
         },
       });
-      console.log(docsToDelete);
       docsToDelete.forEach((document) => {
         const pathToFile = path.join(__dirname, "..", document.url);
         fs.unlink(pathToFile, (err) => {
@@ -312,6 +310,38 @@ const controller = {
         where: { userId: req.user.id, id: folderId },
       });
       await prisma.$transaction([deleteDocs, deleteFolder]);
+      res.status(204).end();
+    }
+  },
+  deleteDocument: async (req, res, next) => {
+    const documentId = parseInt(req.params.documentId);
+    const document = await prisma.document.findFirst({
+      where: { id: documentId },
+    });
+    if (!document) {
+      return res.status(404);
+    } else if (document.userId !== req.user.id) {
+      return res.status(401).json({
+        errors: [
+          {
+            msg: "You do not have the permissions for this action",
+          },
+        ],
+      });
+    } else {
+      const pathToFile = path.join(__dirname, "..", document.url);
+      fs.unlink(pathToFile, (err) => {
+        if (err) {
+          console.error("Error deleting the file", err);
+          return res.status(500).json({ error: "Failed to delete file" });
+        }
+      });
+      const deleteDoc = await prisma.document.delete({
+        where: {
+          userId: req.user.id,
+          id: documentId,
+        },
+      });
       res.status(204).end();
     }
   },

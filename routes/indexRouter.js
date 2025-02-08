@@ -37,4 +37,10 @@ router.delete(
   controller.deleteFolder
 );
 
+router.delete(
+  "/document/:documentId",
+  controller.ensureAuthenticated,
+  controller.deleteDocument
+);
+
 module.exports = router;

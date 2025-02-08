@@ -58,16 +58,18 @@
             <table>
                 <thead>
                     <tr>
+                        <th>Folder:</th>
                         <th>File:</th>
                         <th>Size:</th>
                         <th>Download:</th>
                     </tr>
                 </thead>
                 <%documents.forEach((document) => { %>
-                    <tr>
+                    <tr id="document-<%=document.id%>">
+                        <td><%=document.folder.name%></td>
                         <td><%=document.originalName%></td>
                         <td><%=formatBytes(document.sizeBytes)%></td>
-                        <td><a href='/download/<%=document.savedName%>'>X</a></td>
+                        <td><button onclick="deleteDocument(`<%=document.id%>`)">Delete</button></td>
                     </tr>
                 <%})%>
             </table>
