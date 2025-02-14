@@ -261,7 +261,7 @@ const controller = {
         ],
       });
     } else {
-      res.download(document.url, (err) => {
+      res.download(document.url, document.originalName, (err) => {
         if (err) {
           console.error(err);
           res.status(500).send("Error downloading file");
@@ -352,6 +352,31 @@ const controller = {
       const updateFolder = await prisma.folder.update({
         where: { id: folderId, userId: req.user.id },
         data: { name: req.body.name },
+      });
+      res.redirect("/files");
+    } catch (error) {
+      next(error);
+    }
+  },
+  editDocument: async (req, res, next) => {
+    try {
+      const documentId = parseInt(req.params.documentId);
+      console.log(req.body.folderId);
+      const folderId = parseInt(req.body.folderId);
+      console.log(documentId);
+      console.log(folderId);
+      const newName = req.body.name.trim();
+      const fileExtension = path.extname(req.body.originalName);
+      const updatedName = newName
+        ? newName + fileExtension
+        : req.body.originalName;
+
+      const updateDocument = await prisma.document.update({
+        where: { id: documentId, userId: req.user.id },
+        data: {
+          folder: { connect: { id: folderId } },
+          originalName: updatedName,
+        },
       });
       res.redirect("/files");
     } catch (error) {

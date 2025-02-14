@@ -49,4 +49,10 @@ router.patch(
   controller.renameFolder
 );
 
+router.patch(
+  "/edit/:documentId",
+  controller.ensureAuthenticated,
+  controller.editDocument
+);
+
 module.exports = router;

@@ -69,6 +69,8 @@
                         <th>File:</th>
                         <th>Size:</th>
                         <th>Download:</th>
+                        <th>Edit:</th>
+                        <th>Delete:</th>
                     </tr>
                 </thead>
                 <%documents.forEach((document) => { %>
@@ -76,8 +78,40 @@
                         <td><%=document.folder.name%></td>
                         <td><%=document.originalName%></td>
                         <td><%=formatBytes(document.sizeBytes)%></td>
+                        <td><button onclick="toggleVisibility('document-<%=document.id%>', 'document-<%=document.id%>-form')">Edit</button></td>
+                        <td><form action="/download/<%=document.savedName%>" method="GET"><input type='submit' value='Download'></form></td>
                         <td><button onclick="deleteDocument(`<%=document.id%>`)">Delete</button></td>
                     </tr>
+                    <tr id="document-<%=document.id%>-form" class="hidden">
+                        <form action="/edit/<%=document.id%>?_method=PATCH" method="POST">
+                            <td>
+                                <select name="folderId">
+                                    <% folders.forEach((folder)=> { %>
+                                        <option value="<%=folder.id%>">
+                                            <%=folder.name%>
+                                        </option>
+                                        <% }) %>
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" name="name" placeholder="<%=document.originalName%>">
+                            </td>
+                            <td>
+                                <%= formatBytes(document.sizeBytes) %>
+                            </td>
+                            <td>
+                                <input type="hidden" name="originalName" value="<%=document.originalName%>" />
+                                <input type="submit" value="Make Change">
+                            </td>
+                            <td>
+                                <button type="submit" formaction="/download/<%=document.savedName%>" formmethod="GET">Download</button>
+                            </td>
+                            <td>
+                                <button type="button" onclick="deleteDocument(`<%=document.id%>`)">Delete</button>
+                            </td>
+                        </form>
+                    </tr>
+
                 <%})%>
             </table>
         <%}%>
