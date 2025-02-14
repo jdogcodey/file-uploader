@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload</title>
+    <title>Edit <%=folder.name%></title>
     <link rel="stylesheet" href="/styles.css">
 </head>
 
@@ -23,21 +23,17 @@
         </nav>
     </header>
     <main>
-       <h2>Upload a new file:</h2>
-       <form action="/upload" method="POST" enctype="multipart/form-data">
-        <input type="file" name="upload-file" />
-        <%if (folders) {%>
-            <label for="folder">Folder:</label>
-            <select name="folder">
-                <%folders.forEach((folder)=> {%>
-                    <option value="<%=folder.name%>">
-                        <%=folder.name%>
-                    </option>
-                    <%})%>
-            </select>
-            <%}%>
-        <input type="submit" value="Upload" />
-       </form>
+        <section>
+            <div id="folder-name">
+                <h2><%=folder.name%></h2>
+                <button onclick="toggleVisibility('folder-name','name-form')">Rename</button>
+            </div>
+            <form id="name-form" action="/rename/<%=folder.id%>" method="POST" class="hidden">
+                <label for="name">New Name:</label>
+                <input name="name" id="name" type="text" placeholder="<%=folder.name%>" />
+                <input type="submit" value="Update">
+            </form>
+        </section>
     </main>
     <footer>
         <p>Made by <a href="https://github.com/jdogcodey">jdogcodey</a> following <a

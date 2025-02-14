@@ -1,9 +1,9 @@
-function toggleVisibility() {
-  const logIn = document.getElementsByClassName("log-in")[0];
-  const signUp = document.getElementsByClassName("sign-up")[0];
+function toggleVisibility(eleOne, eleTwo) {
+  const firstEle = document.getElementById(eleOne);
+  const secondEle = document.getElementById(eleTwo);
 
-  logIn.classList.toggle("hidden");
-  signUp.classList.toggle("hidden");
+  firstEle.classList.toggle("hidden");
+  secondEle.classList.toggle("hidden");
 }
 
 function deleteFolder(folderId) {

@@ -43,4 +43,10 @@ router.delete(
   controller.deleteDocument
 );
 
+router.get(
+  "/edit/:folderId",
+  controller.ensureAuthenticated,
+  controller.editFolder
+);
+
 module.exports = router;
