@@ -43,12 +43,6 @@ router.delete(
   controller.deleteDocument
 );
 
-router.get(
-  "/edit/:folderId",
-  controller.ensureAuthenticated,
-  controller.editFolder
-);
-
 router.patch(
   "/rename/:folderId",
   controller.ensureAuthenticated,

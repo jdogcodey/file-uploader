@@ -26,7 +26,6 @@
         <section>
             <%if (!folders) {%>
                 <h2>No Folders</h2>
-                <a href="/add-folder">Create Folder</a>
             <%} else {%>
                 <h2>Folders:</h2>
                 <table>
@@ -41,14 +40,22 @@
                             <tr id="folder-<%=folder.id%>">
                                 <td><%=folder.name%></td>
                                 <td><%=folder.documents.length%></td>
-                                <td><a href='/edit/<%=folder.id%>'>Edit</a></td>
+                                <td><button onclick="toggleVisibility('folder-<%=folder.id%>', 'folder-<%=folder.id%>-form')">Edit</button></td>
                                 <td><button onclick="deleteFolder(`<%=folder.id%>`)">Delete</button></td>
+                            </tr>
+                            <tr id="folder-<%=folder.id%>-form" class="hidden">
+                                <form action="/rename/<%=folder.id%>?_method=PATCH" method="POST" >
+                                    <td><input type='text' name='name' placeholder="<%=folder.name%>"/></td>
+                                    <td><%=folder.documents.length%></td>
+                                    <td><input type="submit" value="Rename"></td>
+                                    <td><button onclick="deleteFolder(`<%=folder.id%>`)">Delete</button></td>
+                                </form>
                             </tr>
                         <%})%>
                     </tbody>
                 </table>
-                <a href="/add-folder">Add Folder</a>
             <%}%>
+            <a href="/add-folder">Create Folder</a>
         </section>
         <section>
         <%if (!documents) {%>

@@ -345,36 +345,6 @@ const controller = {
       res.status(204).end();
     }
   },
-  editFolder: async (req, res, next) => {
-    try {
-      const folderId = parseInt(req.params.folderId);
-
-      const folder = await prisma.folder.findFirst({
-        where: {
-          id: folderId,
-          userId: req.user.id,
-        },
-      });
-
-      if (!folder) {
-        return res.status(403).send("Access denied");
-      }
-
-      const documents = await prisma.document.findMany({
-        where: {
-          folderId: folderId,
-          userId: req.user.id,
-        },
-      });
-
-      return res.render("folder", {
-        folder: folder,
-        documents: documents || [],
-      });
-    } catch (error) {
-      next(error);
-    }
-  },
   renameFolder: async (req, res, next) => {
     try {
       const folderId = parseInt(req.params.folderId);
