@@ -348,7 +348,6 @@ const controller = {
   editFolder: async (req, res, next) => {
     try {
       const folderId = parseInt(req.params.folderId);
-      console.log(folderId);
 
       const folder = await prisma.folder.findFirst({
         where: {
@@ -372,6 +371,19 @@ const controller = {
         folder: folder,
         documents: documents || [],
       });
+    } catch (error) {
+      next(error);
+    }
+  },
+  renameFolder: async (req, res, next) => {
+    try {
+      const folderId = parseInt(req.params.folderId);
+
+      const updateFolder = await prisma.folder.update({
+        where: { id: folderId, userId: req.user.id },
+        data: { name: req.body.name },
+      });
+      res.redirect("/files");
     } catch (error) {
       next(error);
     }

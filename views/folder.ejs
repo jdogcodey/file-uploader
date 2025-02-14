@@ -28,7 +28,7 @@
                 <h2><%=folder.name%></h2>
                 <button onclick="toggleVisibility('folder-name','name-form')">Rename</button>
             </div>
-            <form id="name-form" action="/rename/<%=folder.id%>" method="POST" class="hidden">
+            <form id="name-form" action="/rename/<%=folder.id%>?_method=PATCH" method="POST" class="hidden">
                 <label for="name">New Name:</label>
                 <input name="name" id="name" type="text" placeholder="<%=folder.name%>" />
                 <input type="submit" value="Update">

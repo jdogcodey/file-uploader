@@ -49,4 +49,10 @@ router.get(
   controller.editFolder
 );
 
+router.patch(
+  "/rename/:folderId",
+  controller.ensureAuthenticated,
+  controller.renameFolder
+);
+
 module.exports = router;
