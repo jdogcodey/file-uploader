@@ -44,12 +44,3 @@ function deleteDocument(documentId) {
     })
     .catch((err) => console.error(err));
 }
-
-function showError(errors, field) {
-  return erros
-    ? errors
-        .filter((error) => error.path === field)
-        .map((error) => error.msg)
-        .join("<br>")
-    : "";
-}

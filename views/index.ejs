@@ -49,6 +49,9 @@
                 <form action="/sign-up" method="POST">
                     <label for="first_name">First Name:</label>
                     <input id="first_name" name="first_name" placeholder="John" type="text" />
+                    <% if (typeof errors !== "undefined" && errors.length > 0 && showError(errors, "last_name")) {%>
+                        <p class="error-message"><%= showError(errors, "first_name")%></p>
+                    <% } %>
                     <label for="last_name">Last Name:</label>
                     <input id="last_name" name="last_name" placeholder="Smith" type="text" />
                     <label for="username">Username:</label>
