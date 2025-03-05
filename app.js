@@ -50,4 +50,18 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(routes);
+
+// Catch all unknown routes
+app.use((req, res, next) => {
+  res.status(404).json({ error: "Route not found" });
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack); // Log the error for debugging
+  res
+    .status(500)
+    .json({ error: "Something went wrong, please try again later" });
+});
+
 app.listen(PORT, () => console.log(`app listening on port: ${PORT}`));

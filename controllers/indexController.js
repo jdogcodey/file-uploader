@@ -94,19 +94,17 @@ const controller = {
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
+
     try {
       const checkForDuplicate = await prisma.user.findFirst({
         where: {
           OR: [{ email: req.body.email }, { username: req.body.username }],
         },
       });
+
       if (checkForDuplicate) {
-        let duplicateField;
-        if (checkForDuplicate.email === req.body.email) {
-          duplicateField = "email";
-        } else {
-          duplicateField = "username";
-        }
+        let duplicateField =
+          checkForDuplicate.email === req.body.email ? "email" : "username";
         return res.status(400).json({
           errors: [
             {
@@ -116,7 +114,9 @@ const controller = {
           ],
         });
       }
+
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
       await prisma.user.create({
         data: {
           first_name: req.body.first_name,
@@ -126,16 +126,30 @@ const controller = {
           password: hashedPassword,
         },
       });
+
       res.redirect("/");
     } catch (err) {
-      next(err);
+      if (err.code === "P2002") {
+        // Prisma unique constraint error
+        return res
+          .status(400)
+          .json({ error: "Email or username already exists" });
+      }
+      next(err); // Pass to global error handler
     }
   },
-  logIn: passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/",
-    failureMessage: true,
-  }),
+  logIn: (req, res, next) => {
+    passport.authenticate("local", (err, user, info) => {
+      if (err) return next(err);
+      if (!user) {
+        return res.status(401).json({ error: "Invalid username or password" });
+      }
+      req.logIn(user, (loginErr) => {
+        if (loginErr) return next(loginErr);
+        res.redirect("/");
+      });
+    })(req, res, next);
+  },
   logOut: (req, res, next) => {
     req.logout((err) => {
       if (err) {
@@ -158,15 +172,15 @@ const controller = {
   },
   uploadFile: [
     upload.single("upload-file"),
-    async (req, res) => {
+    async (req, res, next) => {
       try {
-        const folderName = req.body.folder || "New";
+        if (!req.file) {
+          return res.status(400).json({ error: "No file uploaded" });
+        }
 
+        const folderName = req.body.folder || "New";
         let folder = await prisma.folder.findFirst({
-          where: {
-            name: folderName,
-            userId: req.user.id,
-          },
+          where: { name: folderName, userId: req.user.id },
         });
 
         if (!folder) {
@@ -178,7 +192,7 @@ const controller = {
           });
         }
 
-        const newDocument = await prisma.document.create({
+        await prisma.document.create({
           data: {
             originalName: req.file.originalname,
             savedName: req.file.filename,
@@ -191,7 +205,10 @@ const controller = {
 
         res.redirect("/files");
       } catch (error) {
-        res.status(500).json({ error: "Error uploading file" });
+        console.error("Upload error:", error);
+        res
+          .status(500)
+          .json({ error: "Error uploading file, please try again" });
       }
     },
   ],
@@ -270,47 +287,71 @@ const controller = {
     }
   },
   deleteFolder: async (req, res, next) => {
-    const folderId = parseInt(req.params.folderId);
-    const folder = await prisma.folder.findFirst({
-      where: { id: folderId },
-    });
-    if (!folder) {
-      return res.status(404);
-    } else if (folder.userId !== req.user.id) {
-      return res.status(401).json({
-        errors: [
-          {
-            msg: "You do not have the permissions for this action",
-          },
-        ],
+    try {
+      const folderId = parseInt(req.params.folderId);
+
+      // Check if the folder exists
+      const folder = await prisma.folder.findFirst({
+        where: { id: folderId },
       });
-    } else {
+
+      if (!folder) {
+        return res.status(404).json({ error: "Folder not found" });
+      }
+
+      // Check for permissions
+      if (folder.userId !== req.user.id) {
+        return res.status(401).json({
+          errors: [
+            {
+              msg: "You do not have the permissions for this action",
+            },
+          ],
+        });
+      }
+
+      // Fetch documents related to the folder
       const docsToDelete = await prisma.document.findMany({
         where: {
           userId: req.user.id,
           folderId: folderId,
         },
       });
-      docsToDelete.forEach((document) => {
+
+      // Delete each document file asynchronously
+      for (const document of docsToDelete) {
         const pathToFile = path.join(__dirname, "..", document.url);
-        fs.unlink(pathToFile, (err) => {
-          if (err) {
-            console.error("Error deleting the file:", err);
-            return res.status(500).json({ error: "Failed to delete file" });
-          }
+
+        await new Promise((resolve, reject) => {
+          fs.unlink(pathToFile, (err) => {
+            if (err) {
+              console.error("Error deleting the file:", err);
+              reject(new Error("Failed to delete file"));
+            } else {
+              resolve();
+            }
+          });
         });
-      });
-      const deleteDocs = prisma.document.deleteMany({
-        where: {
-          userId: req.user.id,
-          folderId: folderId,
-        },
-      });
-      const deleteFolder = prisma.folder.delete({
-        where: { userId: req.user.id, id: folderId },
-      });
-      await prisma.$transaction([deleteDocs, deleteFolder]);
+      }
+
+      // Perform database deletions for documents and the folder
+      await prisma.$transaction([
+        prisma.document.deleteMany({
+          where: {
+            userId: req.user.id,
+            folderId: folderId,
+          },
+        }),
+        prisma.folder.delete({
+          where: { userId: req.user.id, id: folderId },
+        }),
+      ]);
+
       res.status(204).end();
+    } catch (error) {
+      console.error(error);
+      // Return a general error if something goes wrong
+      res.status(500).json({ error: "An unexpected error occurred" });
     }
   },
   deleteDocument: async (req, res, next) => {
