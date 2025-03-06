@@ -34,3 +34,10 @@ li {
     list-style-type: none;
 }
 
+footer {
+    align-self: center;
+}
+
+main {
+    flex: 1;
+}
