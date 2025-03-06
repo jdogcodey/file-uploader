@@ -1,111 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>File Uploader</title>
-    
+
     <link rel="stylesheet" href="/styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Quicksand:wght@300..700&display=swap"
+    rel="stylesheet">
+    
+
 </head>
+
 <body>
     <%if (errors) {console.log(errors)}%>
-    <header>
-        <h1>File Uploader</h1>
-        <nav>
-            <ul>
-                <li>
-                    <a href="/">Home</a>
-                </li>
-                <% if (!user) {%>
+        <header class="light-purple orange-text">
+            <h1>File Uploader</h1>
+            <nav>
+                <ul>
                     <li>
-                        <a href="/log-in">Log In</a>
+                        <a href="/">Home</a>
                     </li>
-                    <li>
-                        <a href="/sign-up">Sign Up</a>
-                    </li>
+                    <% if (!user) {%>
+                        <li>
+                            <a href="/log-in">Log In</a>
+                        </li>
+                        <li>
+                            <a href="/sign-up">Sign Up</a>
+                        </li>
+                        <%}%>
+                            <%if (user) {%>
+                                <li>
+                                    <a href="/log-out">Log Out</a>
+                                </li>
+                                <%}%>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <%if (!user) {%>
+                <div id="log-in" class="<%= signUp ? 'hidden' : ''%>">
+                    <h2>Please log in</h2>
+                    <div class="bottom-form">
+                    <form action="/log-in" method="POST">
+                        <label for="username">Username</label>
+                        <input id="username" class='align-right' name="username" placeholder="e.g. JohnSmith12" type="text" />
+                        <label for="password">Password</label>
+                        <input id="password" class='align-right' name="password" type="password" />
+                        <input class='submit' type="submit" value="Log In">
+                    </form>
+                    <button class='switch' onclick="toggleVisibility('log-in', 'sign-up')">Not Signed Up? - Click Here</button>
+                    </div>
+                </div>
+                <div id="sign-up" class="<%= signUp ? '' : 'hidden'%>">
+                    <h2>Please sign up</h2>
+                    <div class="bottom-form">
+                    <form action="/sign-up" method="POST">
+                        <label for="first_name">First Name:</label>
+                        <input id="first_name" class='align-right' name="first_name" placeholder="John" type="text" />
+                        <% function showError(errors, field) { return errors ? errors.filter((error)=> error.path ===
+                            field).map((error) => error.msg).join("<br>"): ""}%>
+                            <% let wereThereErrors=false;%>
+                                <% if (typeof errors !=="undefined" && errors.length> 0 && showError(errors,
+                                    "first_name")) {%>
+                                    <p class="error-message"><%- showError(errors, "first_name" )%></p>
+                                    <% let wereThereErrors=true;%>
+                                        <% } %>
+                                            <label for="last_name">Last Name:</label>
+                                            <input id="last_name" class='align-right' name="last_name" placeholder="Smith" type="text" />
+                                            <% if (typeof errors !=="undefined" && errors.length> 0 && showError(errors,
+                                                "last_name")) {%>
+                                                <p class="error-message">
+                                                    <%- showError(errors, "last_name" )%>
+                                                </p>
+                                                <% } %>
+                                                    <label for="username">Username:</label>
+                                                    <input id="username" class='align-right' name="username" placeholder="JohnSmith"
+                                                        type="text" />
+                                                    <% if (typeof errors !=="undefined" && errors.length> 0 &&
+                                                        showError(errors, "username")) {%>
+                                                        <p class="error-message">
+                                                            <%- showError(errors, "username" )%>
+                                                        </p>
+                                                        <% } %>
+                                                            <label for="email">Email:</label>
+                                                            <input id="email" class='align-right' name="email"
+                                                                placeholder="johnsmith@email.com" type="email" />
+                                                            <% if (typeof errors !=="undefined" && errors.length> 0 &&
+                                                                showError(errors, "email")) {%>
+                                                                <p class="error-message">
+                                                                    <%- showError(errors, "email" )%>
+                                                                </p>
+                                                                <% } %>
+                                                                    <label for="password">Password:</label>
+                                                                    <input id="password" class='align-right' name="password"
+                                                                        type="password" />
+                                                                    <% if (typeof errors !=="undefined" &&
+                                                                        errors.length> 0 && showError(errors,
+                                                                        "password")) {%>
+                                                                        <p class="error-message">
+                                                                            <%- showError(errors, "password" )%>
+                                                                        </p>
+                                                                        <% } %>
+                                                                            <label for="confirm-password">Confirm
+                                                                                Password:</label>
+                                                                            <input id="confirm-password" class='align-right'
+                                                                                name="confirm-password"
+                                                                                type="password" />
+                                                                            <% if (typeof errors !=="undefined" &&
+                                                                                errors.length> 0 && showError(errors,
+                                                                                "confirm-password")) {%>
+                                                                                <p class="error-message">
+                                                                                    <%- showError(errors, "confirm-password"
+                                                                                        )%>
+                                                                                </p>
+                                                                                <% } %>
+                                                                                    <input class='submit' type="submit"
+                                                                                        value="Sign Up">
+                    </form>
+                    <button class= 'switch' onclick="toggleVisibility('log-in', 'sign-up')">Already a user? Click Here to Log
+                        In</button>
+                </div>
+                </div>
                 <%}%>
-                <%if (user) {%>
-                    <li>
-                        <a href="/log-out">Log Out</a>
-                    </li>
-                <%}%>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <%if (!user) {%>
-            <div id="log-in" class="<%= signUp ? 'hidden' : ''%>">
-                <h2>Please log in</h2>
-                <form action="/log-in" method="POST">
-                    <label for="username">Username</label>
-                    <input id="username" name="username" placeholder="e.g. JohnSmith12" type="text" />
-                    <label for="password">Password</label>
-                    <input id="password" name="password" type="password" />
-                    <input type="submit" value="Log In">
-                </form>
-                <button onclick="toggleVisibility('log-in', 'sign-up')">Not Signed Up? - Click Here</button>
-            </div>
-            <div id="sign-up" class="<%= signUp ? '' : 'hidden'%>">
-                <h2>Please sign up</h2>
-                <form action="/sign-up" method="POST">
-                    <label for="first_name">First Name:</label>
-                    <input id="first_name" name="first_name" placeholder="John" type="text" />
-                    <% function showError(errors, field) { return errors ? errors.filter((error) => error.path === field).map((error) => error.msg).join("<br>"): ""}%>
-                    <% let wereThereErrors = false;%>
-                    <% if (typeof errors !== "undefined" && errors.length > 0 && showError(errors, "first_name")) {%>
-                        <p class="error-message"><%- showError(errors, "first_name")%></p>
-                    <% let wereThereErrors = true;%>
-                    <% } %>
-                    <label for="last_name">Last Name:</label>
-                    <input id="last_name" name="last_name" placeholder="Smith" type="text" />
-                    <% if (typeof errors !=="undefined" && errors.length> 0 && showError(errors, "last_name")) {%>
-                        <p class="error-message">
-                            <%- showError(errors, "last_name" )%>
-                        </p>
-                            <% } %>
-                    <label for="username">Username:</label>
-                    <input id="username" name="username" placeholder="JohnSmith" type="text" />
-                    <% if (typeof errors !=="undefined" && errors.length> 0 && showError(errors, "username")) {%>
-                        <p class="error-message">
-                            <%- showError(errors, "username" )%>
-                        </p>
-                            <% } %>
-                    <label for="email">Email:</label>
-                    <input id="email" name="email" placeholder="johnsmith@email.com" type="email" />
-                    <% if (typeof errors !=="undefined" && errors.length> 0 && showError(errors, "email")) {%>
-                        <p class="error-message">
-                            <%- showError(errors, "email" )%>
-                        </p>
-                            <% } %>
-                    <label for="password">Password:</label>
-                    <input id="password" name="password" type="password" />
-                    <% if (typeof errors !=="undefined" && errors.length> 0 && showError(errors, "password")) {%>
-                        <p class="error-message">
-                            <%- showError(errors, "password" )%>
-                        </p>
-                            <% } %>
-                    <label for="confirm-password">Confirm Password:</label>
-                    <input id="confirm-password" name="confirm-password" type="password" />
-                    <% if (typeof errors !=="undefined" && errors.length> 0 && showError(errors, "confirm-password")) {%>
-                        <p class="error-message">
-                            <%- showError(errors, "confirm-password" )%>
-                        </p>
-                            <% } %>
-                    <input type="submit" value="Sign Up">
-                </form>
-                <button onclick="toggleVisibility('log-in', 'sign-up')">Already a user? Click Here to Log In</button>
-            </div>
-        <%}%>
-        <%if (user) {%>
-            <div>
-                <a href="/files">Go to Library</a>
-                <a href="/upload">Upload a new document</a>
-            </div>
-            <%}%>
-    </main>
-    <footer>
-        <p>Made by <a href="https://github.com/jdogcodey">jdogcodey</a> following <a href='https://www.theodinproject.com/'>The Odin Project</a> - <a href='https://www.theodinproject.com/lessons/nodejs-file-uploader'>File Uploader</a></p>
-    </footer>
-    <script src="/additionaljs.js"></script>
+                    <%if (user) {%>
+                        <div>
+                            <a href="/files">Go to Library</a>
+                            <a href="/upload">Upload a new document</a>
+                        </div>
+                        <%}%>
+        </main>
+        <footer class="light-cream">
+            <p>Made by <a href="https://github.com/jdogcodey">jdogcodey</a> following <a
+                    href='https://www.theodinproject.com/'>The Odin Project</a> - <a
+                    href='https://www.theodinproject.com/lessons/nodejs-file-uploader'>File Uploader</a></p>
+        </footer>
+        <script src="/additionaljs.js"></script>
 </body>
+
 </html>

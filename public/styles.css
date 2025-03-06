@@ -1,10 +1,20 @@
+html {
+    background-color: #FFDCCC;
+}
+
 body {
     max-width: 80%;
     margin: 0 auto;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 400;
+    font-size: 12;
+    background-color: white;
 }
+
+
 
 
 .hidden {
@@ -15,11 +25,26 @@ header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    padding: 20px;
+    text-shadow: 2px 2px #000000;
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+    border-bottom-color: #000000;
+    border-radius: 0 0 50px 0;
+}
+
+h1 {
+    font-family: 'Poppins', 'Quicksand', sans-serif;
+    font-size: 3rem;
+    margin: 0;
 }
 
 nav {
     display: flex;
     align-items: center;
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0;
 }
 
 nav ul {
@@ -28,6 +53,7 @@ nav ul {
     justify-content: space-evenly;
     min-width: 20vw;
     align-items: center;
+    margin: 0;
 }
 
 li {
@@ -35,9 +61,145 @@ li {
 }
 
 footer {
-    align-self: center;
+    text-align: center;
+    width: 100%;
+    font-size: 0.8rem;
+}
+
+footer p a {
+    font-weight: 600;
+}
+
+footer p a:hover  {
+    text-decoration: underline;
 }
 
 main {
     flex: 1;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Light Purple */
+.light-purple {
+    background-color: #B7B1F2;
+
+}
+
+.light-purple-text {
+    color: #B7B1F2;
+}
+
+/* Light Pink */
+.light-pink {
+    background-color: #FDB7EA;
+}
+
+.light-pink-text {
+    color: #FDB7EA;
+}
+
+/* Light Yellow */
+.orange {
+    background-color: #FFDCCC;
+}
+
+.orange-text {
+    color: #FFDCCC;
+}
+
+/* Light Cream */
+.light-cream {
+    background-color: #FBF3B9;
+}
+
+.light-cream-text {
+    color: #FBF3B9;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+#log-in, #sign-up {
+    min-width: 40%;
+        max-width: 60%;
+        margin: 20px;
+}
+
+h2 {
+    width: 100%;
+    background-color: #B7B1F2;
+    margin: 0;
+    padding: 15px 15px 30px 15px;
+    border-radius: 20px 5px 0px 0px;
+    font-family: 'Poppins', 'Quicksand', sans-serif;
+    color: #ffdccc;
+    text-shadow: 2px 2px #000000;
+    font-size: 2rem;
+}
+
+.bottom-form {
+    width: 100%;
+    background-color: #FFDCCC;
+    margin: 0;
+    padding: 15px;
+    border-radius: 0px 0px 20px 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    border-bottom-color: #000000;
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.align-right {
+    align-self: flex-end;
+    max-width: 90%;
+    min-width: 80%;
+    border: 1px solid #B7B1F2;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.align-right::placeholder {
+    color: #B7B1F2;
+    font-weight: 100px;
+    
+}
+
+
+
+.submit {
+    text-align: center;
+    font-weight: 800;
+    padding: 15px;
+    background-color: #B7B1F2;
+    color: #FFDCCC;
+    text-shadow: 2px 2px #000000;
+    width: fit-content;
+    align-self: center;
+    border-radius: 20px;
+    border: none;
+    font-size: 1.5rem;
+}
+
+.switch {
+    background-color: inherit;
+    border: none;
+}
+
+.switch:hover {
+    font-weight: 800;
+    text-decoration: underline;
 }

@@ -9,9 +9,9 @@ router.post("/sign-up", controller.signUpValidation(), controller.signUp);
 
 router.get("/sign-up", controller.signUpPage);
 
-router.post("/log-in", controller.logIn);
-
 router.get("/log-in", controller.logInPage);
+
+router.post("/log-in", controller.logIn);
 
 router.get("/log-out", controller.logOut);
 
