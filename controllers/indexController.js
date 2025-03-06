@@ -43,7 +43,10 @@ function formatBytes(bytes, decimals = 2) {
 
 const controller = {
   homepage: (req, res, next) => {
-    res.render("index", { user: req.user, errors: [] });
+    res.render("index", { user: req.user, errors: [], signUp: false });
+  },
+  signUpPage: (req, res, next) => {
+    res.render("index", { user: req.user, errors: [], signUp: true });
   },
   signUpValidation: () => [
     body("first_name")
@@ -92,9 +95,11 @@ const controller = {
   signUp: async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res
-        .status(400)
-        .render("index", { user: req.user, errors: errors.array() || [] });
+      return res.status(400).render("index", {
+        user: req.user,
+        errors: errors.array() || [],
+        signUp: true,
+      });
     }
 
     try {

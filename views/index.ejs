@@ -34,7 +34,7 @@
     </header>
     <main>
         <%if (!user) {%>
-            <div id="log-in" class="<%= errors.length > 0 ? 'hidden' : ''%>">
+            <div id="log-in" class="<%= signUp ? 'hidden' : ''%>">
                 <h2>Please log in</h2>
                 <form action="/log-in" method="POST">
                     <label for="username">Username</label>
@@ -45,50 +45,50 @@
                 </form>
                 <button onclick="toggleVisibility('log-in', 'sign-up')">Not Signed Up? - Click Here</button>
             </div>
-            <div id="sign-up" class="<%= errors.length > 0 ? '' : 'hidden'%>">
+            <div id="sign-up" class="<%= signUp ? '' : 'hidden'%>">
                 <h2>Please sign up</h2>
                 <form action="/sign-up" method="POST">
                     <label for="first_name">First Name:</label>
                     <input id="first_name" name="first_name" placeholder="John" type="text" />
-                    <% function showError(errors, field) { return errors ? errors.filter((error) => error.path === field).map((error) => error.msg).join(`<br>`): ""}%>
+                    <% function showError(errors, field) { return errors ? errors.filter((error) => error.path === field).map((error) => error.msg).join("<br>"): ""}%>
                     <% let wereThereErrors = false;%>
                     <% if (typeof errors !== "undefined" && errors.length > 0 && showError(errors, "first_name")) {%>
-                        <p class="error-message"><%= showError(errors, "first_name")%></p>
+                        <p class="error-message"><%- showError(errors, "first_name")%></p>
                     <% let wereThereErrors = true;%>
                     <% } %>
                     <label for="last_name">Last Name:</label>
                     <input id="last_name" name="last_name" placeholder="Smith" type="text" />
                     <% if (typeof errors !=="undefined" && errors.length> 0 && showError(errors, "last_name")) {%>
                         <p class="error-message">
-                            <%= showError(errors, "last_name" )%>
+                            <%- showError(errors, "last_name" )%>
                         </p>
                             <% } %>
                     <label for="username">Username:</label>
                     <input id="username" name="username" placeholder="JohnSmith" type="text" />
                     <% if (typeof errors !=="undefined" && errors.length> 0 && showError(errors, "username")) {%>
                         <p class="error-message">
-                            <%= showError(errors, "username" )%>
+                            <%- showError(errors, "username" )%>
                         </p>
                             <% } %>
                     <label for="email">Email:</label>
                     <input id="email" name="email" placeholder="johnsmith@email.com" type="email" />
                     <% if (typeof errors !=="undefined" && errors.length> 0 && showError(errors, "email")) {%>
                         <p class="error-message">
-                            <%= showError(errors, "email" )%>
+                            <%- showError(errors, "email" )%>
                         </p>
                             <% } %>
                     <label for="password">Password:</label>
                     <input id="password" name="password" type="password" />
                     <% if (typeof errors !=="undefined" && errors.length> 0 && showError(errors, "password")) {%>
                         <p class="error-message">
-                            <%= showError(errors, "password" )%>
+                            <%- showError(errors, "password" )%>
                         </p>
                             <% } %>
                     <label for="confirm-password">Confirm Password:</label>
                     <input id="confirm-password" name="confirm-password" type="password" />
                     <% if (typeof errors !=="undefined" && errors.length> 0 && showError(errors, "confirm-password")) {%>
                         <p class="error-message">
-                            <%= showError(errors, "confirm-password" )%>
+                            <%- showError(errors, "confirm-password" )%>
                         </p>
                             <% } %>
                     <input type="submit" value="Sign Up">
