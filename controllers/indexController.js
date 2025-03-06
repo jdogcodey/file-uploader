@@ -48,6 +48,9 @@ const controller = {
   signUpPage: (req, res, next) => {
     res.render("index", { user: req.user, errors: [], signUp: true });
   },
+  logInPage: (req, res, next) => {
+    res.render("index", { user: req.user, errors: [], signUp: false });
+  },
   signUpValidation: () => [
     body("first_name")
       .trim()

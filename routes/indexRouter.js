@@ -11,6 +11,8 @@ router.get("/sign-up", controller.signUpPage);
 
 router.post("/log-in", controller.logIn);
 
+router.get("/log-in", controller.logInPage);
+
 router.get("/log-out", controller.logOut);
 
 router.get("/upload", controller.ensureAuthenticated, controller.uploadPage);
