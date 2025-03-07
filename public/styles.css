@@ -1,16 +1,16 @@
 html {
     background-color: #FFDCCC;
+    font-size: 16;
 }
 
 body {
-    max-width: 80%;
-    margin: 0 auto;
+    margin: 0 10% 0 10%;
+    transition: margin 0.3s ease;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     font-family: 'Quicksand', sans-serif;
     font-weight: 400;
-    font-size: 12;
     background-color: white;
 }
 
@@ -25,26 +25,26 @@ header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 20px;
-    text-shadow: 2px 2px #000000;
-    border-bottom-width: 2px;
+    padding: clamp(5px, 1vw, 20px);
+    text-shadow: 0.125rem 0.125rem #000000;
+    border-bottom-width: 0.125rem;
     border-bottom-style: solid;
     border-bottom-color: #000000;
-    border-radius: 0 0 50px 0;
+    border-radius: 0 0 2.5rem 0;
 }
 
 h1 {
     font-family: 'Poppins', 'Quicksand', sans-serif;
-    font-size: 3rem;
+    font-size: clamp(1.25rem, 2vw,3rem);
     margin: 0;
 }
 
 nav {
     display: flex;
     align-items: center;
-    font-size: 2rem;
+    font-size: clamp(1rem, 1.5vw, 1.5rem);
     font-weight: 600;
-    margin: 0;
+    margin: 0 5vw 0 0;
 }
 
 nav ul {
@@ -54,6 +54,12 @@ nav ul {
     min-width: 20vw;
     align-items: center;
     margin: 0;
+    gap: clamp(1rem, 1vw, 2rem);
+}
+
+nav ul li:hover {
+    font-weight: 600;
+    text-decoration: underline;
 }
 
 li {
@@ -63,7 +69,7 @@ li {
 footer {
     text-align: center;
     width: 100%;
-    font-size: 0.8rem;
+    font-size: clamp(0.5rem, 1vw, 1rem);
 }
 
 footer p a {
@@ -76,11 +82,11 @@ footer p a:hover  {
 
 main {
     flex: 1;
-    margin: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    margin: 10px auto;
 }
 
 /* Light Purple */
@@ -126,41 +132,43 @@ a {
 }
 
 #log-in, #sign-up {
-    min-width: 40%;
-        max-width: 60%;
-        margin: 20px;
+    width: min(96vw, 500px);
+    margin: 0 2vw;
 }
 
 h2 {
     width: 100%;
+    box-sizing: border-box;
     background-color: #B7B1F2;
     margin: 0;
-    padding: 15px 15px 30px 15px;
+    padding: clamp(5px, 1vw, 20px) clamp(5px, 1vw, 20px) clamp(5px, 2vw, 30px) clamp(5px, 1vw, 20px);
     border-radius: 20px 5px 0px 0px;
     font-family: 'Poppins', 'Quicksand', sans-serif;
     color: #ffdccc;
-    text-shadow: 2px 2px #000000;
-    font-size: 2rem;
+    text-shadow: 0.125rem 0.125rem #000000;
+    font-size: clamp(1.25rem, 2vw, 2rem);
 }
 
 .bottom-form {
     width: 100%;
+    box-sizing: border-box;
     background-color: #FFDCCC;
     margin: 0;
-    padding: 15px;
+    padding: clamp(5px, 1vw, 20px);
     border-radius: 0px 0px 20px 5px;
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: clamp(5px, 2vh, 10px);
     border-bottom-color: #000000;
     border-bottom-width: 2px;
     border-bottom-style: solid;
+    font-size: clamp(1rem, 1vw, 1.25rem);
 }
 
 form {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: clamp(5px, 2vh, 10px);
 }
 
 .align-right {
@@ -169,7 +177,7 @@ form {
     min-width: 80%;
     border: 1px solid #B7B1F2;
     border-radius: 10px;
-    padding: 5px;
+    padding: clamp(5px, 0.5vw, 10px);
 }
 
 .align-right::placeholder {
@@ -183,7 +191,7 @@ form {
 .submit {
     text-align: center;
     font-weight: 800;
-    padding: 15px;
+    padding: clamp(5px, 1vw, 20px);
     background-color: #B7B1F2;
     color: #FFDCCC;
     text-shadow: 2px 2px #000000;
@@ -191,7 +199,11 @@ form {
     align-self: center;
     border-radius: 20px;
     border: none;
-    font-size: 1.5rem;
+}
+
+.submit:hover {
+    text-decoration: underline;
+    box-shadow: 2px 2px 2px #000000;
 }
 
 .switch {
@@ -203,3 +215,40 @@ form {
     font-weight: 800;
     text-decoration: underline;
 }
+
+.error-message {
+    align-self: flex-end;
+    font-weight: 600;
+    background-color: #FBF3B9;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+@media (max-width: 1200px) {
+    body {
+        margin-left: 8%;
+        margin-right: 8%;
+    }
+}
+
+@media (max-width: 1024px) {
+    body {
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        margin-left: 3%;
+        margin-right: 3%;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+            margin-left: 0;
+            margin-right: 0;
+    }
+}
+

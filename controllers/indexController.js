@@ -43,13 +43,28 @@ function formatBytes(bytes, decimals = 2) {
 
 const controller = {
   homepage: (req, res, next) => {
-    res.render("index", { user: req.user, errors: [], signUp: false });
+    res.render("index", {
+      user: req.user,
+      errors: [],
+      signUp: false,
+      logInError: false,
+    });
   },
   signUpPage: (req, res, next) => {
-    res.render("index", { user: req.user, errors: [], signUp: true });
+    res.render("index", {
+      user: req.user,
+      errors: [],
+      signUp: true,
+      logInError: false,
+    });
   },
   logInPage: (req, res, next) => {
-    res.render("index", { user: req.user, errors: [], signUp: false });
+    res.render("index", {
+      user: req.user,
+      errors: [],
+      signUp: false,
+      logInError: false,
+    });
   },
   signUpValidation: () => [
     body("first_name")
@@ -102,6 +117,7 @@ const controller = {
         user: req.user,
         errors: errors.array() || [],
         signUp: true,
+        logInError: false,
       });
     }
 
@@ -152,7 +168,12 @@ const controller = {
     passport.authenticate("local", (err, user, info) => {
       if (err) return next(err);
       if (!user) {
-        return res.status(401).json({ error: "Invalid username or password" });
+        return res.status(401).render("index", {
+          logInError: true,
+          errors: [],
+          signUp: false,
+          user: false,
+        });
       }
       req.logIn(user, (loginErr) => {
         if (loginErr) return next(loginErr);

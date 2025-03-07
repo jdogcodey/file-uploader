@@ -51,6 +51,9 @@
                         <input id="username" class='align-right' name="username" placeholder="e.g. JohnSmith12" type="text" />
                         <label for="password">Password</label>
                         <input id="password" class='align-right' name="password" type="password" />
+                        <%if (logInError) { %>
+                            <p class="error-message">Invalid Username or Password</p>
+                            <%}%>
                         <input class='submit' type="submit" value="Log In">
                     </form>
                     <button class='switch' onclick="toggleVisibility('log-in', 'sign-up')">Not Signed Up? - Click Here</button>
