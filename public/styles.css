@@ -307,6 +307,32 @@ form {
 table {
     margin-top: 10px;
     margin-bottom: 10px;
+    /* border-radius: 15px; */
+
+                border-collapse: collapse;
+                                border-bottom-color: #B7B1F2;
+                                    border-bottom-width: 1px;
+                                    border-bottom-style: solid;
+
+}
+
+th {
+    background-color: #B7B1F2;
+    color:#FFDCCC;
+    padding: 5px;
+    text-shadow: 2px 2px #000000;
+}
+
+td {
+                border-left-color: #B7B1F2;
+                    border-left-width: 1px;
+                    border-left-style: solid;
+
+                    border-right-color: #000000;
+                        border-right-width: 1px;
+                        border-right-style: solid;
+                        padding: 5px;
+
 }
 
 .upload-page, .add-folder-page {
