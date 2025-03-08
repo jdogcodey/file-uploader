@@ -262,16 +262,53 @@ form {
     margin: 5vw;
 }
 
-#go-files-button, #go-upload-button {
-    font-size: clamp(1.25rem, 15vw, 2rem);
+.in-page-nav-buttons {
+    font-size: 1rem;
     text-align: center;
     background-color: #B7B1F2;
     color:#FFDCCC;
     text-shadow: 2px 2px #000000;
     font-weight: 600;
-    padding: clamp(5px, 2vw, 20px);
+    padding: 8px;
     border-radius: 15px;
     border-bottom-color: #000000;
     border-bottom-width: 2px;
     border-bottom-style: solid;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#go-files-button, #go-upload-button {
+        font-size: clamp(1.25rem, 15vw, 2rem);
+        padding: clamp(5px, 1.5vw, 15px);
+        margin: 15px;
+}
+
+#files-page-main {
+    align-items: flex-start;
+    margin: 10px 2vw;
+    gap: 1vw;
+    flex-wrap: wrap;
+}
+
+.folders-panel, .files-panel {
+    
+}
+
+.folders-panel {
+    flex: 1 1 auto;
+    min-width: 100px;
+}
+
+.files-panel {
+    flex: 10 1 auto;
+}
+
+table {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.upload-page, .add-folder-page {
+    flex-direction: column;
 }

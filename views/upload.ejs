@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <header>
+    <header class="light-purple orange-text">
         <h1>File Uploader</h1>
         <nav>
             <ul>
@@ -22,13 +22,13 @@
             </ul>
         </nav>
     </header>
-    <main>
+    <main class="upload-page">
        <h2>Upload a new file:</h2>
-       <form action="/upload" method="POST" enctype="multipart/form-data">
-        <input type="file" name="upload-file" />
+       <form class="bottom-form" action="/upload" method="POST" enctype="multipart/form-data">
+        <input class="in-page-nav-buttons" type="file" name="upload-file" />
         <%if (folders) {%>
             <label for="folder">Folder:</label>
-            <select name="folder">
+            <select class='align-right' name="folder">
                 <%folders.forEach((folder)=> {%>
                     <option value="<%=folder.name%>">
                         <%=folder.name%>
@@ -36,7 +36,7 @@
                     <%})%>
             </select>
             <%}%>
-        <input type="submit" value="Upload" />
+        <input class="submit" type="submit" value="Upload" />
        </form>
     </main>
     <footer>

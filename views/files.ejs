@@ -22,8 +22,8 @@
             </ul>
         </nav>
     </header>
-    <main>
-        <section>
+    <main id="files-page-main">
+        <section class="folders-panel">
             <%if (!folders) {%>
                 <h2>No Folders</h2>
             <%} else {%>
@@ -55,9 +55,9 @@
                     </tbody>
                 </table>
             <%}%>
-            <a href="/add-folder">Create Folder</a>
+            <a class="in-page-nav-buttons" href="/add-folder">Create Folder</a>
         </section>
-        <section>
+        <section class="files-panel">
         <%if (!documents) {%>
             <h2>You don't have any files!</h2>
         <%} else {%>
@@ -115,10 +115,10 @@
                 <%})%>
             </table>
         <%}%>
-        <a href="/upload">Upload Document</a>
+        <a class='in-page-nav-buttons' href="/upload">Upload Document</a>
         </section>
     </main>
-    <footer>
+    <footer class="light-cream">
         <p>Made by <a href="https://github.com/jdogcodey">jdogcodey</a> following <a
                 href='https://www.theodinproject.com/'>The Odin Project</a> - <a
                 href='https://www.theodinproject.com/lessons/nodejs-file-uploader'>File Uploader</a></p>
